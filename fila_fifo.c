@@ -29,12 +29,13 @@ int f_inserir (Fila_FIFO **f, int chave, int valor)
     
     novo = (Fila_FIFO*)malloc(sizeof(Fila_FIFO));
     if(novo == NULL)
+    {
         return 0;
+    }
     
-    //int novo->NumCon = Ncon;
-    //int novo->Numcla = Ncla;
-    //int novo->QantOp = Qop;
-    //int novo->prox = NULL;
+    novo->NumCon = chave;
+    novo->QntOp = valor;
+    novo->prox = NULL;
     
     if(*f == NULL)
     {
@@ -51,9 +52,93 @@ int f_inserir (Fila_FIFO **f, int chave, int valor)
     return 1;
 }
 
+int f_obter_proxima_chave (Fila_FIFO **f)
+{
+    Fila_FIFO *no;
+    
+    no = *f;
+    if(no == NULL)
+    {
+        return -1;
+    }
+    *f = no->prox;
+    return no->NumCon;
+}
+
+int f_consultar_proxima_chave (Fila_FIFO **f)
+{
+    Fila_FIFO *no;
+    
+    no = *f;
+    if(no == NULL)
+    {
+        return -1;
+    }
+    return no->NumCon;
+}
+
+int f_consultar_proximo_valor (Fila_FIFO **f)
+{
+    Fila_FIFO *no;
+    
+    no = *f;
+    if(no == NULL)
+    {
+        return -1;
+    }
+    return no->QntOp;
+}
+
 int f_num_elementos (Fila_FIFO **f)
 {
-    int i;
+    int i = 0;
+    Fila_FIFO *inicio = *f;
     
+    while(inicio != NULL)
+    {
+        i++;
+        inicio = inicio->prox;
+    }
+    return i;
+}
+
+int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao)
+{
+    int i = 1;
+    Fila_FIFO *inicio = *f;
+
+    while(inicio != NULL && i < posicao)
+    {
+        i++;
+        inicio = inicio->prox;
+    }
+    return inicio->NumCon;
     
+    return -1;
+}
+
+int f_consultar_valor_por_posicao (Fila_FIFO **f, int posicao)
+{
+    int i = 1;
+    Fila_FIFO *inicio = *f;
+
+    while(inicio != NULL && i < posicao)
+    {
+        i++;
+        inicio = inicio->prox;
+    }
+    return inicio->QntOp;
+    
+    return -1;
+}
+
+void percorrer(Fila_FIFO *f)
+{
+    Fila_FIFO *inicio = f;
+    
+    while(inicio != NULL)
+    {
+        printf("Numero da Conta:%d\nQuantida de Operaçoes:%d\n\n", inicio->NumCon, inicio->QntOp);
+        inicio = inicio->prox;
+    }
 }
