@@ -1,39 +1,5 @@
 #include "fila_fifo.h"
-
-/*
-gera, apartir do parametro na linha de comando, o nome do arquivo de entrada e de 
-saida.
-*/
-void nome_arqvs(char *ent, char *sai, char *argv)
-{
-    char nulo[4] = "0", *num_arq = (char*)malloc(sizeof(char) * 4);
-    
-    if(strlen(argv) == 4)
-    {
-        strcat(ent, "entrada-");
-        strcat(ent, argv);
-        strcat(ent, ".txt");
-        strcat(sai, "saida-");
-        strcat(sai, argv);
-        strcat(sai, ".txt");
-    }
-    else
-    {
-        while(strlen(nulo) + strlen(argv) < 4)
-        {
-            strcat(nulo, "0");
-        }
-        strcat(nulo, argv);
-        strcpy(num_arq, nulo);
-        strcat(ent, "entrada-");
-        strcat(ent, num_arq);
-        strcat(ent, ".txt");
-        strcat(sai, "saida-");
-        strcat(sai, num_arq);
-        strcat(sai, ".txt");
-    }
-}
-
+#include "escalonador.h"
 
 /*
 Inicializa a fila.
