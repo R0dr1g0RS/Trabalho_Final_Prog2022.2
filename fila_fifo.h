@@ -5,7 +5,7 @@
 typedef struct Fifo
 {
     int NumCon;
-    //int NumCla;      /*eu acho que a struct nao vai ter essa variavel porque ele nao pede na hora do inserir*/
+    int NumCla;      
     int QntOp;
     struct Fifo *prox;
 } Fila_FIFO;
