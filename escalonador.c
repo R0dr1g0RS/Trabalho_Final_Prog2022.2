@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "fila_FIFO.h"
 #include "escalonador.h"
 
 
@@ -60,7 +59,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
             
             e->premium->NumCla = classe;
             e->premium->NumCon = num_conta;
-            e->premium->QantOp = qtde_operacoes; // Cliente inserido!
+            e->premium->QntOp = qtde_operacoes; // Cliente inserido!
             e->premium->prox = NULL; 
             return(1);
         }
@@ -83,7 +82,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p = p->prox;
         p->NumCla = classe;
         p->NumCon = num_conta;
-        p->QantOp = qtde_operacoes;
+        p->QntOp = qtde_operacoes;
         p->prox = NULL;
         return(1);
     }
@@ -97,7 +96,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
             
             e->ouro->NumCla = classe;
             e->ouro->NumCon = num_conta;
-            e->ouro->QantOp = qtde_operacoes; // Cliente inserido!
+            e->ouro->QntOp = qtde_operacoes; // Cliente inserido!
             e->ouro->prox = NULL; 
             return(1);
         }
@@ -120,7 +119,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p = p->prox;
         p->NumCla = classe;
         p->NumCon = num_conta;
-        p->QantOp = qtde_operacoes;
+        p->QntOp = qtde_operacoes;
         p->prox = NULL;
         return(1);        
     }
@@ -134,7 +133,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
             
             e->prata->NumCla = classe;
             e->prata->NumCon = num_conta;
-            e->prata->QantOp = qtde_operacoes; // Cliente inserido!
+            e->prata->QntOp = qtde_operacoes; // Cliente inserido!
             e->prata->prox = NULL; 
             return(1);
         }
@@ -157,7 +156,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p = p->prox;
         p->NumCla = classe;
         p->NumCon = num_conta;
-        p->QantOp = qtde_operacoes;
+        p->QntOp = qtde_operacoes;
         p->prox = NULL;
         return(1);        
     }
@@ -171,7 +170,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
             
             e->bronze->NumCla = classe;
             e->bronze->NumCon = num_conta;
-            e->bronze->QantOp = qtde_operacoes; // Cliente inserido!
+            e->bronze->QntOp = qtde_operacoes; // Cliente inserido!
             e->bronze->prox = NULL; 
             return(1);
         }
@@ -194,7 +193,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p = p->prox;
         p->NumCla = classe;
         p->NumCon = num_conta;
-        p->QantOp = qtde_operacoes;
+        p->QntOp = qtde_operacoes;
         p->prox = NULL;
         return(1);        
     }
@@ -208,7 +207,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
             
             e->leezu->NumCla = classe;
             e->leezu->NumCon = num_conta;
-            e->leezu->QantOp = qtde_operacoes; // Cliente inserido!
+            e->leezu->QntOp = qtde_operacoes; // Cliente inserido!
             e->leezu->prox = NULL; 
             return(1);
         }
@@ -231,7 +230,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p = p->prox;
         p->NumCla = classe;
         p->NumCon = num_conta;
-        p->QantOp = qtde_operacoes;
+        p->QntOp = qtde_operacoes;
         p->prox = NULL;
         return(1);
     }    
@@ -400,7 +399,7 @@ int e_consultar_prox_qtde_oper (Escalonador *e)
             e->count_n_1 = 0;
         else
         {
-            return(e->premium->QantOp);
+            return(e->premium->QntOp);
         }
     }
     if (e->count_n_2 != 0)
@@ -409,7 +408,7 @@ int e_consultar_prox_qtde_oper (Escalonador *e)
             e->count_n_2 = 0;
         else
         {
-            return(e->ouro->QantOp);
+            return(e->ouro->QntOp);
         }
     }
     if (e->count_n_3 != 0)
@@ -418,7 +417,7 @@ int e_consultar_prox_qtde_oper (Escalonador *e)
             e->count_n_3 = 0;
         else
         {
-            return(e->prata->QantOp);
+            return(e->prata->QntOp);
         }
     }
     if (e->count_n_4 != 0)
@@ -427,7 +426,7 @@ int e_consultar_prox_qtde_oper (Escalonador *e)
             e->count_n_4 = 0;
         else
         {
-            return(e->bronze->QantOp);
+            return(e->bronze->QntOp);
         }
     }
     if (e->count_n_5 != 0)
@@ -436,7 +435,7 @@ int e_consultar_prox_qtde_oper (Escalonador *e)
             e->count_n_5 = 0;
         else
         {
-            return(e->leezu->QantOp);
+            return(e->leezu->QntOp);
         }
     }
     return(-1); // Sem clientes
@@ -574,7 +573,7 @@ int e_consultar_tempo_prox_cliente (Escalonador *e)
             e->count_n_1 = 0;
         else
         {
-            return(e->premium->QantOp * e->delta_t);
+            return(e->premium->QntOp * e->delta_t);
         }
     }
     if (e->count_n_2 != 0)
@@ -583,7 +582,7 @@ int e_consultar_tempo_prox_cliente (Escalonador *e)
             e->count_n_2 = 0;
         else
         {
-            return(e->ouro->QantOp * e->delta_t);
+            return(e->ouro->QntOp * e->delta_t);
         }
     }
     if (e->count_n_3 != 0)
@@ -592,7 +591,7 @@ int e_consultar_tempo_prox_cliente (Escalonador *e)
             e->count_n_3 = 0;
         else
         {
-            return(e->prata->QantOp * e->delta_t);
+            return(e->prata->QntOp * e->delta_t);
         }
     }
     if (e->count_n_4 != 0)
@@ -601,7 +600,7 @@ int e_consultar_tempo_prox_cliente (Escalonador *e)
             e->count_n_4 = 0;
         else
         {
-            return(e->bronze->QantOp * e->delta_t);
+            return(e->bronze->QntOp * e->delta_t);
         }
     }
     if (e->count_n_5 != 0)
@@ -610,7 +609,7 @@ int e_consultar_tempo_prox_cliente (Escalonador *e)
             e->count_n_5 = 0;
         else
         {
-            return(e->leezu->QantOp * e->delta_t);
+            return(e->leezu->QntOp * e->delta_t);
         }
     }
     return(-1); // Sem clientes
@@ -639,29 +638,29 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     int num_conta, num_operacoes;
     char classe_conta[8];
 
-    entradas = fopen(arq_nome, "r");
+    entradas = fopen(nome_arq_in, "r");
 
     if (entradas == NULL){
-        printf("entrou\n");
-        return 0;
+        printf("Nao foi possivel ler o arquivo\n");
     }
-
-    fscanf(entradas, "qtde de caixas = %d\n", &caixa);
-    printf("%d\n", caixa);
-    fscanf(entradas, "delta t = %d\n", &tempo);
-    printf("%d\n", tempo);
-    fscanf(entradas,"disciplina de escalonamento = {%d,%d,%d,%d,%d}\n", &e_1, &e_2,&e_3, &e_4, &e_5);
-    printf("%d\n", e_1);
-    printf("%d\n", e_2);
-    printf("%d\n", e_3);
-    printf("%d\n", e_4);
-    printf("%d\n", e_5);
-    //Essa parte é só pra ver se tava pegando os arquivos corretamente;
-    //Tem que fazer ir alocando na fila de acordo com a disciplina de escalonamento;
-    while(fscanf(entradas,"%s - conta %d - %d operacao(oes)", classe_conta, &num_conta , &num_operacoes) != EOF){
-        printf("Classe:\t%s\n", classe_conta);
-        printf("Conta:\t%d\n", num_conta);
-        printf("Operações:\t%d\n", num_operacoes);
+    else
+    {
+        fscanf(entradas, "qtde de caixas = %d\n", &caixa);
+        printf("%d\n", caixa);
+        fscanf(entradas, "delta t = %d\n", &tempo);
+        printf("%d\n", tempo);
+        fscanf(entradas,"disciplina de escalonamento = {%d,%d,%d,%d,%d}\n", &e_1, &e_2,&e_3, &e_4, &e_5);
+        printf("%d\n", e_1);
+        printf("%d\n", e_2);
+        printf("%d\n", e_3);
+        printf("%d\n", e_4);
+        printf("%d\n", e_5);
+        //Essa parte é só pra ver se tava pegando os arquivos corretamente;
+        //Tem que fazer ir alocando na fila de acordo com a disciplina de escalonamento;
+        while(fscanf(entradas,"%s - conta %d - %d operacao(oes)", classe_conta, &num_conta , &num_operacoes) != EOF){
+            printf("Classe:\t%s\n", classe_conta);
+            printf("Conta:\t%d\n", num_conta);
+            printf("Operações:\t%d\n", num_operacoes);
+        }
     }
-    return 1;
 };
