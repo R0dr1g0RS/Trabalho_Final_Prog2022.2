@@ -16,18 +16,20 @@ representada por {n_1; n_2; n_2; n_4; n_5}, nos termos do que foi definido na p�
 */
 void e_inicializar(Escalonador *e, int caixas, int delta_t, int n_1, int n_2, int n_3, int n_4, int n_5)
 {
+    
     // Alocação
     e = (Escalonador *)malloc(sizeof(Escalonador));
     if (e == NULL)
         exit(EXIT_FAILURE);
-
+    
     // Ninguém nas filas
-    e->premium = NULL;
-    e->ouro = NULL;
-    e->prata = NULL;
-    e->bronze = NULL;
-    e->leezu = NULL;
-
+    f_inicializar(&e->premium);
+    f_inicializar(&e->ouro);
+    f_inicializar(&e->prata);
+    f_inicializar(&e->bronze);
+    f_inicializar(&e->leezu);
+    
+    
     e->delta_t = delta_t;
     e->caixas = caixas;
     e->n_1 = n_1;
@@ -51,7 +53,8 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
 {
     if (classe == 1) // Cliente premium
     {
-        if (e->premium == NULL) // Caso onde a fila está vazia
+        f_inserir(&e->premium, num_conta, qtde_operacoes);
+        /*if (e->premium == NULL) // Caso onde a fila está vazia
         {
             e->premium =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
             if (e->premium == NULL)
@@ -84,11 +87,12 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p->NumCon = num_conta;
         p->QntOp = qtde_operacoes;
         p->prox = NULL;
-        return(1);
+        return(1);*/
     }
     if (classe == 2) // Cliente ouro
     {
-        if (e->ouro == NULL) // Caso onde a fila está vazia
+        f_inserir(&e->ouro, num_conta, qtde_operacoes);
+        /*if (e->ouro == NULL) // Caso onde a fila está vazia
         {
             e->ouro =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
             if (e->ouro == NULL)
@@ -121,11 +125,12 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p->NumCon = num_conta;
         p->QntOp = qtde_operacoes;
         p->prox = NULL;
-        return(1);        
+        return(1);*/        
     }
     if (classe == 3) // Cliente prata
     {
-        if (e->prata == NULL) // Caso onde a fila está vazia
+        f_inserir(&e->prata, num_conta, qtde_operacoes);
+        /*if (e->prata == NULL) // Caso onde a fila está vazia
         {
             e->prata =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
             if (e->prata == NULL)
@@ -158,11 +163,12 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p->NumCon = num_conta;
         p->QntOp = qtde_operacoes;
         p->prox = NULL;
-        return(1);        
+        return(1);*/        
     }
     if (classe == 4) // Cliente bronze
     {
-        if (e->bronze == NULL) // Caso onde a fila está vazia
+        f_inserir(&e->bronze, num_conta, qtde_operacoes);
+        /*if (e->bronze == NULL) // Caso onde a fila está vazia
         {
             e->bronze =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
             if (e->bronze == NULL)
@@ -195,11 +201,12 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p->NumCon = num_conta;
         p->QntOp = qtde_operacoes;
         p->prox = NULL;
-        return(1);        
+        return(1);*/        
     }
     if (classe == 5) // Cliente leezu
     {
-        if (e->leezu == NULL) // Caso onde a fila está vazia
+        f_inserir(&e->leezu, num_conta, qtde_operacoes);
+        /*if (e->leezu == NULL) // Caso onde a fila está vazia
         {
             e->leezu =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
             if (e->leezu == NULL)
@@ -232,7 +239,7 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
         p->NumCon = num_conta;
         p->QntOp = qtde_operacoes;
         p->prox = NULL;
-        return(1);
+        return(1);*/
     }    
 };
 
@@ -700,8 +707,6 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
         total_cl_prata,
         total_cl_bronze,
         total_cl_leezu,
-        caixa_usado,
-        total_t_[5],
         num_clients[e->caixas];
     float 
         t_medio_premium,
@@ -715,22 +720,21 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
 
     saida = fopen(nome_arq_out, "wt");
 
+    fprintf(saida, "T = %d min: Caixa %d chama da categoria %s cliente da conta %d para realizar %d operacao(oes).\n", -1, -1, "nada", -1, -1);
     
-    //fprintf("T = %d min: Caixa %d chama da categoria %s cliente da conta %d para realizar %d operacao(oes).\n", total_t, caixa_usado, /*fazer if's*/, num_conta);
-    
-    fprintf("Tempo total de atendimento: %d minutos.\n", total_t);
-    fprintf("Tempo medio de espera dos %d clientes Premium: %2f\n", total_cl_prem, t_medio_premium);
-    fprintf("Tempo medio de espera dos %d clientes Ouro: %2f\n", total_cl_ouro, t_medio_ouro);
-    fprintf("Tempo medio de espera dos %d clientes Prata: %2f\n", total_cl_prata, t_medio_prata);
-    fprintf("Tempo medio de espera dos %d clientes Bronze: %2f\n", total_cl_bronze, t_medio_bronze);
-    fprintf("Tempo medio de espera dos %d clientes Comuns: %2f\n", total_cl_leezu, t_medio_leezu);
-    //fprintf("Quantidade media de operacoes por cliente Premium = %2f\n", oper_media_premium);
-    //fprintf("Quantidade media de operacoes por cliente Ouro = %2f\n", oper_media_ouro);
-    //fprintf("Quantidade media de operacoes por cliente Prata = %2f\n", oper_media_prata);
-    //fprintf("Quantidade media de operacoes por cliente Bronze = %2f\n", oper_media_bronze);
-    //fprintf("Quantidade media de operacoes por cliente Leezu = %2f\n", oper_media_leezu);
+    fprintf(saida, "Tempo total de atendimento: %d minutos.\n", total_t);
+    fprintf(saida, "Tempo medio de espera dos %d clientes Premium: %2f\n", total_cl_prem, t_medio_premium);
+    fprintf(saida, "Tempo medio de espera dos %d clientes Ouro: %2f\n", total_cl_ouro, t_medio_ouro);
+    fprintf(saida, "Tempo medio de espera dos %d clientes Prata: %2f\n", total_cl_prata, t_medio_prata);
+    fprintf(saida, "Tempo medio de espera dos %d clientes Bronze: %2f\n", total_cl_bronze, t_medio_bronze);
+    fprintf(saida, "Tempo medio de espera dos %d clientes Comuns: %2f\n", total_cl_leezu, t_medio_leezu);
+    fprintf(saida, "Quantidade media de operacoes por cliente Premium = %2f\n", t_medio_premium);
+    fprintf(saida, "Quantidade media de operacoes por cliente Ouro = %2f\n", t_medio_ouro);
+    fprintf(saida, "Quantidade media de operacoes por cliente Prata = %2f\n", t_medio_prata);
+    fprintf(saida, "Quantidade media de operacoes por cliente Bronze = %2f\n", t_medio_bronze);
+    fprintf(saida, "Quantidade media de operacoes por cliente Leezu = %2f\n", t_medio_leezu);
     for (int i = 0; i <= e->caixas; i++)
     {
-        fprintf("O caixa de número %d atendeu %d clientes.\n", (i+1), num_clients[i]);
+        fprintf(saida, "O caixa de número %d atendeu %d clientes.\n", (i+1), num_clients[i]);
     }
-};
+}
