@@ -700,6 +700,8 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
         total_cl_prata,
         total_cl_bronze,
         total_cl_leezu,
+        caixa_usado,
+        total_t_[5],
         num_clients[e->caixas];
     float 
         t_medio_premium,
@@ -713,7 +715,8 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
 
     saida = fopen(nome_arq_out, "wt");
 
-    fprintf(saida, "T = %d min: Caixa %d chama da categoria %s cliente da conta %d para realizar %d operacao(oes).\n", );
+    
+    //fprintf("T = %d min: Caixa %d chama da categoria %s cliente da conta %d para realizar %d operacao(oes).\n", total_t, caixa_usado, /*fazer if's*/, num_conta);
     
     fprintf("Tempo total de atendimento: %d minutos.\n", total_t);
     fprintf("Tempo medio de espera dos %d clientes Premium: %2f\n", total_cl_prem, t_medio_premium);
