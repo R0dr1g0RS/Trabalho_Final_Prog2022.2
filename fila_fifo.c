@@ -1,5 +1,4 @@
 #include "fila_fifo.h"
-#include "escalonador.h"
 
 /*
 Inicializa a fila.
