@@ -17,14 +17,14 @@ int f_inserir (Fila_FIFO **f, int chave, int valor)
 {
     Fila_FIFO *novo, *no;
     
-    novo = (Fila_FIFO*)malloc(sizeof(Fila_FIFO));
-    if(novo == NULL)
+    novo = (Fila_FIFO*)malloc(sizeof(Fila_FIFO));  // Alocação de memória
+    if(novo == NULL)       
     {
         return 0;
     }
     
     novo->NumCon = chave;
-    novo->QntOp = valor;
+    novo->QntOp = valor;   // Inserindo a chave e o valor
     novo->prox = NULL;
     
     if(*f == NULL)
@@ -32,7 +32,7 @@ int f_inserir (Fila_FIFO **f, int chave, int valor)
         *f = novo;
         return 1;
     }
-    no = *f;
+    no = *f;     // Ponteiro auxiliar para percorrer a fila
     while(no->prox != NULL)
     {
         no = no->prox;
