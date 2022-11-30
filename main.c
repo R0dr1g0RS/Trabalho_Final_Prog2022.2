@@ -48,5 +48,6 @@ int main(int narg, char *argv[])
         strcat(sai, num_arq);
         strcat(sai, ".txt");
     }
+    //teste
     return EXIT_SUCCESS;
 }
