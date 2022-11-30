@@ -724,12 +724,12 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     fprintf("Tempo medio de espera dos %d clientes Prata: %2f\n", total_cl_prata, t_medio_prata);
     fprintf("Tempo medio de espera dos %d clientes Bronze: %2f\n", total_cl_bronze, t_medio_bronze);
     fprintf("Tempo medio de espera dos %d clientes Comuns: %2f\n", total_cl_leezu, t_medio_leezu);
-    fprintf("Quantidade media de operacoes por cliente Premium = %2f\n", oper_media_premium);
-    fprintf("Quantidade media de operacoes por cliente Ouro = %2f\n", oper_media_ouro);
-    fprintf("Quantidade media de operacoes por cliente Prata = %2f\n", oper_media_prata);
-    fprintf("Quantidade media de operacoes por cliente Bronze = %2f\n", oper_media_bronze);
-    fprintf("Quantidade media de operacoes por cliente Leezu = %2f\n", oper_media_leezu);
-    for (int i = 0, i <= e->caixas, i++)
+    //fprintf("Quantidade media de operacoes por cliente Premium = %2f\n", oper_media_premium);
+    //fprintf("Quantidade media de operacoes por cliente Ouro = %2f\n", oper_media_ouro);
+    //fprintf("Quantidade media de operacoes por cliente Prata = %2f\n", oper_media_prata);
+    //fprintf("Quantidade media de operacoes por cliente Bronze = %2f\n", oper_media_bronze);
+    //fprintf("Quantidade media de operacoes por cliente Leezu = %2f\n", oper_media_leezu);
+    for (int i = 0; i <= e->caixas; i++)
     {
         fprintf("O caixa de número %d atendeu %d clientes.\n", (i+1), num_clients[i]);
     }
