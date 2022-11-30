@@ -17,21 +17,36 @@ int main(int narg, char *argv[])
     f_inicializar(&f4);
     f_inicializar(&f5);
     
-    f_inserir(&f1, 755816, 3);                            //
-    f_inserir(&f1, 814107, 8);                            //
-    f_inserir(&f1, 746865, 3);                            //
-    //prox_chave = f_obter_proxima_chave(&f1);            //
-    //prox_valor = f_consultar_proximo_valor(&f1);        //
-    num_elementos = f_num_elementos(&f1);                 //
-    prox_chave = f_consultar_chave_por_posicao(&f1, 3);   /*aqui eu so tava testando as funçoes se quiserem apagar podem*/
-    prox_valor = f_consultar_valor_por_posicao(&f1, 3);   //
-    //printf("%d\n", prox_chave);                         //
-    printf("%d\n", prox_valor);                           //
-    //printf("%d\n", num_elementos);                      //
-    percorrer(f1);                                        //
-    
-    
-    
+    //Ainda tem que ajeitar para funcionar aqui;
+    char 
+        nulo[4] = "0", 
+        sai[20], 
+        ent[20],
+        *num_arq = (char*)malloc(sizeof(char) * 4);
 
+    if(strlen(argv) == 4)
+    {
+        strcat(ent, "entrada-");
+        strcat(ent, argv);
+        strcat(ent, ".txt");
+        strcat(sai, "saida-");
+        strcat(sai, argv);
+        strcat(sai, ".txt");
+    }
+    else
+    {
+        while(strlen(nulo) + strlen(argv) < 4)
+        {
+            strcat(nulo, "0");
+        }
+        strcat(nulo, argv);
+        strcpy(num_arq, nulo);
+        strcat(ent, "entrada-");
+        strcat(ent, num_arq);
+        strcat(ent, ".txt");
+        strcat(sai, "saida-");
+        strcat(sai, num_arq);
+        strcat(sai, ".txt");
+    }
     return EXIT_SUCCESS;
 }
