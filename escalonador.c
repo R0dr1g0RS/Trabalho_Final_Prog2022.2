@@ -699,14 +699,14 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
         total_cl_ouro,
         total_cl_prata,
         total_cl_bronze,
-        total_cl_leezu;
+        total_cl_leezu,
+        num_clients[e->caixas];
     float 
         t_medio_premium,
         t_medio_ouro,
         t_medio_prata,
         t_medio_bronze,
         t_medio_leezu;
-        num_clients[e->caixas];
 
     FILE *saida;
     e_conf_por_arquivo(e, nome_arq_in);
@@ -714,20 +714,20 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     saida = fopen(nome_arq_out, "wt");
 
     fprintf(saida, "T = %d min: Caixa %d chama da categoria %s cliente da conta %d para realizar %d operacao(oes).\n", );
-
-    fprintf("Tempo total de atendimento: %d minutos.", total_t);
-    fprintf("Tempo medio de espera dos %d clientes Premium: %2f", total_cl_prem, t_medio_premium);
-    fprintf("Tempo medio de espera dos %d clientes Ouro: %2f", total_cl_ouro, t_medio_ouro);
-    fprintf("Tempo medio de espera dos %d clientes Prata: %2f", total_cl_prata, t_medio_prata);
-    fprintf("Tempo medio de espera dos %d clientes Bronze: %2f", total_cl_bronze, t_medio_bronze);
-    fprintf("Tempo medio de espera dos %d clientes Comuns: %2f", total_cl_leezu, t_medio_leezu);
-    fprintf("Quantidade media de operacoes por cliente Premium = %2f", oper_media_premium);
-    fprintf("Quantidade media de operacoes por cliente Ouro = %2f", oper_media_ouro);
-    fprintf("Quantidade media de operacoes por cliente Prata = %2f", oper_media_prata);
-    fprintf("Quantidade media de operacoes por cliente Bronze = %2f", oper_media_bronze);
-    fprintf("Quantidade media de operacoes por cliente Leezu = %2f", oper_media_leezu);
+    
+    fprintf("Tempo total de atendimento: %d minutos.\n", total_t);
+    fprintf("Tempo medio de espera dos %d clientes Premium: %2f\n", total_cl_prem, t_medio_premium);
+    fprintf("Tempo medio de espera dos %d clientes Ouro: %2f\n", total_cl_ouro, t_medio_ouro);
+    fprintf("Tempo medio de espera dos %d clientes Prata: %2f\n", total_cl_prata, t_medio_prata);
+    fprintf("Tempo medio de espera dos %d clientes Bronze: %2f\n", total_cl_bronze, t_medio_bronze);
+    fprintf("Tempo medio de espera dos %d clientes Comuns: %2f\n", total_cl_leezu, t_medio_leezu);
+    fprintf("Quantidade media de operacoes por cliente Premium = %2f\n", oper_media_premium);
+    fprintf("Quantidade media de operacoes por cliente Ouro = %2f\n", oper_media_ouro);
+    fprintf("Quantidade media de operacoes por cliente Prata = %2f\n", oper_media_prata);
+    fprintf("Quantidade media de operacoes por cliente Bronze = %2f\n", oper_media_bronze);
+    fprintf("Quantidade media de operacoes por cliente Leezu = %2f\n", oper_media_leezu);
     for (int i = 0, i <= e->caixas, i++)
     {
-        fprintf("O caixa de número %d atendeu %d clientes.", (i+1), num_clients[i]);
+        fprintf("O caixa de número %d atendeu %d clientes.\n", (i+1), num_clients[i]);
     }
 };
