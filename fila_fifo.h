@@ -10,8 +10,6 @@ typedef struct Fifo
     struct Fifo *prox;
 } Fila_FIFO;
 
-void nome_arqvs(char *ent, char *sai, char *argv);
-
 void f_inicializar (Fila_FIFO **f);
 
 int f_inserir (Fila_FIFO **f, int chave, int valor);
