@@ -621,34 +621,69 @@ Realiza a configuração de inicialização do escalonador através da leitura d
 “nome_arq_conf”, retornando 1 em caso de sucesso e 0 caso contrário. 
 */
 int e_conf_por_arquivo (Escalonador *e, char *nome_arq_conf)
-{   
-    //Ainda tem que ajeitar para funcionar aqui;
-    char nulo[4] = "0", *num_arq = (char*)malloc(sizeof(char) * 4);
+{
+    FILE *entradas;
+    int caixa, tempo;
+    int 
+        e_1, //
+        e_2, //
+        e_3, // Disciplina de Atendimento
+        e_4, //
+        e_5; //
+    int 
+        num_conta, 
+        num_operacoes;
+    char 
+        classe_conta[8],
+        c1[] = "Premium",
+        c2[] = "Ouro",
+        c3[] = "Prata",
+        c4[] = "Bronze",
+        c5[] = "Leezu";
 
-    if(strlen(argv) == 4)
+
+    entradas = fopen(nome_arq_conf, "r");
+
+    if (entradas == NULL)
     {
-        strcat(ent, "entrada-");
-        strcat(ent, argv);
-        strcat(ent, ".txt");
-        strcat(sai, "saida-");
-        strcat(sai, argv);
-        strcat(sai, ".txt");
+        return(0);
     }
-    else
+
+    fscanf(entradas, "qtde de caixas = %d\n", &caixa);
+    fscanf(entradas, "delta t = %d\n", &tempo);
+    fscanf(entradas,"disciplina de escalonamento = {%d,%d,%d,%d,%d}\n", &e_1, &e_2,&e_3, &e_4, &e_5);
+    
+    e_inicializar(e, caixa, tempo, e_1, e_2, e_3, e_4, e_5);
+
+    while(fscanf(entradas,"%s - conta %d - %d operacao(oes)", classe_conta, &num_conta , &num_operacoes) != EOF)
     {
-        while(strlen(nulo) + strlen(argv) < 4)
+        if (strcmp(classe_conta, c1) == 0)
         {
-            strcat(nulo, "0");
+            e_inserir_por_fila(e, 1, num_conta, num_operacoes);
         }
-        strcat(nulo, argv);
-        strcpy(num_arq, nulo);
-        strcat(ent, "entrada-");
-        strcat(ent, num_arq);
-        strcat(ent, ".txt");
-        strcat(sai, "saida-");
-        strcat(sai, num_arq);
-        strcat(sai, ".txt");
+        else if (strcmp(classe_conta, c2) == 0)
+        {
+            e_inserir_por_fila(e, 2, num_conta, num_operacoes);
+        }
+        else if (strcmp(classe_conta, c3) == 0)
+        {
+            e_inserir_por_fila(e, 3, num_conta, num_operacoes);
+        }
+        else if (strcmp(classe_conta, c4) == 0)
+        {
+            e_inserir_por_fila(e, 4, num_conta, num_operacoes);
+        }
+        else if (strcmp(classe_conta, c5) == 0)
+        {
+            e_inserir_por_fila(e, 5, num_conta, num_operacoes);
+        }
+        else
+        {
+            return(0);
+        }
     }
+    fclose(entradas); 
+    return(1);      
 };
 
 
@@ -658,35 +693,8 @@ o resultado do processamento para arquivo de nome “nome_arq_out”.
 */
 void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
 {
-    FILE *entradas;
-    int caixa, tempo;
-    int e_1, e_2, e_3, e_4, e_5; //disciplina de atendimento para cada classe de conta;
-    int num_conta, num_operacoes;
-    char classe_conta[8];
+    FILE *saida;
+    e_conf_por_arquivo(e, nome_arq_in);
 
-    entradas = fopen(nome_arq_in, "r");
-
-    if (entradas == NULL){
-        printf("Nao foi possivel ler o arquivo\n");
-    }
-    else
-    {
-        fscanf(entradas, "qtde de caixas = %d\n", &caixa);
-        printf("%d\n", caixa);
-        fscanf(entradas, "delta t = %d\n", &tempo);
-        printf("%d\n", tempo);
-        fscanf(entradas,"disciplina de escalonamento = {%d,%d,%d,%d,%d}\n", &e_1, &e_2,&e_3, &e_4, &e_5);
-        printf("%d\n", e_1);
-        printf("%d\n", e_2);
-        printf("%d\n", e_3);
-        printf("%d\n", e_4);
-        printf("%d\n", e_5);
-        //Essa parte é só pra ver se tava pegando os arquivos corretamente;
-        //Tem que fazer ir alocando na fila de acordo com a disciplina de escalonamento;
-        while(fscanf(entradas,"%s - conta %d - %d operacao(oes)", classe_conta, &num_conta , &num_operacoes) != EOF){
-            printf("Classe:\t%s\n", classe_conta);
-            printf("Conta:\t%d\n", num_conta);
-            printf("Operações:\t%d\n", num_operacoes);
-        }
-    }
+    saida = fopen(nome_arq_out, "wt");
 };
