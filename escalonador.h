@@ -5,8 +5,8 @@
 typedef struct escalonador
 {
     int 
-        delta_t,
-        caixas,
+        delta_t, // Delta t(em minutos)
+        caixas, // Numero de Caixas
         n_1, n_2, n_3, n_4, n_5, // Disciplina de atendimento < ESTÁTICO >
         count_n_1, count_n_2, count_n_3, count_n_4, count_n_5; // Contadores para as filas < VOLÁTIL >
     Fila_FIFO
