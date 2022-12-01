@@ -22,7 +22,7 @@ void e_inicializar(Escalonador *e, int caixas, int delta_t, int n_1, int n_2, in
     if (e == NULL)
         exit(EXIT_FAILURE);
     
-    // Ninguém nas filas
+
     f_inicializar(&e->premium);
     f_inicializar(&e->ouro);
     f_inicializar(&e->prata);
@@ -54,193 +54,24 @@ int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_opera
     if (classe == 1) // Cliente premium
     {
         f_inserir(&e->premium, num_conta, qtde_operacoes);
-        /*if (e->premium == NULL) // Caso onde a fila está vazia
-        {
-            e->premium =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
-            if (e->premium == NULL)
-                return(0);
-            
-            e->premium->NumCla = classe;
-            e->premium->NumCon = num_conta;
-            e->premium->QntOp = qtde_operacoes; // Cliente inserido!
-            e->premium->prox = NULL; 
-            return(1);
-        }
-
-        Fila_FIFO
-            *p =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Ponteiro auxiliar para percorrer a fila
-        if (p == NULL)
-            return(0);
-        p = e->premium;
-
-        while (p->prox != NULL) 
-        {
-            p = p->prox;
-        }
-        
-        p->prox = (Fila_FIFO *)malloc(sizeof(Fila_FIFO));
-        if (p->prox == NULL)
-            return(0);
-
-        p = p->prox;
-        p->NumCla = classe;
-        p->NumCon = num_conta;
-        p->QntOp = qtde_operacoes;
-        p->prox = NULL;
-        return(1);*/
     }
     if (classe == 2) // Cliente ouro
     {
         f_inserir(&e->ouro, num_conta, qtde_operacoes);
-        /*if (e->ouro == NULL) // Caso onde a fila está vazia
-        {
-            e->ouro =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
-            if (e->ouro == NULL)
-                return(0);
-            
-            e->ouro->NumCla = classe;
-            e->ouro->NumCon = num_conta;
-            e->ouro->QntOp = qtde_operacoes; // Cliente inserido!
-            e->ouro->prox = NULL; 
-            return(1);
-        }
-
-        Fila_FIFO
-            *p =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Ponteiro auxiliar para percorrer a fila
-        if (p == NULL)
-            return(0);
-        p = e->ouro;
-
-        while (p->prox != NULL) 
-        {
-            p = p->prox;
-        }
-        
-        p->prox = (Fila_FIFO *)malloc(sizeof(Fila_FIFO));
-        if (p->prox == NULL)
-            return(0);
-
-        p = p->prox;
-        p->NumCla = classe;
-        p->NumCon = num_conta;
-        p->QntOp = qtde_operacoes;
-        p->prox = NULL;
-        return(1);*/        
     }
     if (classe == 3) // Cliente prata
     {
         f_inserir(&e->prata, num_conta, qtde_operacoes);
-        /*if (e->prata == NULL) // Caso onde a fila está vazia
-        {
-            e->prata =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
-            if (e->prata == NULL)
-                return(0);
-            
-            e->prata->NumCla = classe;
-            e->prata->NumCon = num_conta;
-            e->prata->QntOp = qtde_operacoes; // Cliente inserido!
-            e->prata->prox = NULL; 
-            return(1);
-        }
-
-        Fila_FIFO
-            *p =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Ponteiro auxiliar para percorrer a fila
-        if (p == NULL)
-            return(0);
-        p = e->prata;
-
-        while (p->prox != NULL) 
-        {
-            p = p->prox;
-        }
-        
-        p->prox = (Fila_FIFO *)malloc(sizeof(Fila_FIFO));
-        if (p->prox == NULL)
-            return(0);
-
-        p = p->prox;
-        p->NumCla = classe;
-        p->NumCon = num_conta;
-        p->QntOp = qtde_operacoes;
-        p->prox = NULL;
-        return(1);*/        
     }
     if (classe == 4) // Cliente bronze
     {
         f_inserir(&e->bronze, num_conta, qtde_operacoes);
-        /*if (e->bronze == NULL) // Caso onde a fila está vazia
-        {
-            e->bronze =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
-            if (e->bronze == NULL)
-                return(0);
-            
-            e->bronze->NumCla = classe;
-            e->bronze->NumCon = num_conta;
-            e->bronze->QntOp = qtde_operacoes; // Cliente inserido!
-            e->bronze->prox = NULL; 
-            return(1);
-        }
-
-        Fila_FIFO
-            *p =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Ponteiro auxiliar para percorrer a fila
-        if (p == NULL)
-            return(0);
-        p = e->bronze;
-
-        while (p->prox != NULL) 
-        {
-            p = p->prox;
-        }
-        
-        p->prox = (Fila_FIFO *)malloc(sizeof(Fila_FIFO));
-        if (p->prox == NULL)
-            return(0);
-
-        p = p->prox;
-        p->NumCla = classe;
-        p->NumCon = num_conta;
-        p->QntOp = qtde_operacoes;
-        p->prox = NULL;
-        return(1);*/        
     }
     if (classe == 5) // Cliente leezu
     {
         f_inserir(&e->leezu, num_conta, qtde_operacoes);
-        /*if (e->leezu == NULL) // Caso onde a fila está vazia
-        {
-            e->leezu =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Alocação na memória
-            if (e->leezu == NULL)
-                return(0);
-            
-            e->leezu->NumCla = classe;
-            e->leezu->NumCon = num_conta;
-            e->leezu->QntOp = qtde_operacoes; // Cliente inserido!
-            e->leezu->prox = NULL; 
-            return(1);
-        }
-
-        Fila_FIFO
-            *p =  (Fila_FIFO *)malloc(sizeof(Fila_FIFO)); // Ponteiro auxiliar para percorrer a fila
-        if (p == NULL)
-            return(0);
-        p = e->leezu;
-
-        while (p->prox != NULL) 
-        {
-            p = p->prox;
-        }
-        
-        p->prox = (Fila_FIFO *)malloc(sizeof(Fila_FIFO));
-        if (p->prox == NULL)
-            return(0);
-
-        p = p->prox;
-        p->NumCla = classe;
-        p->NumCon = num_conta;
-        p->QntOp = qtde_operacoes;
-        p->prox = NULL;
-        return(1);*/
     }    
+    return (1);
 };
 
 
