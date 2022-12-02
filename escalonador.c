@@ -156,6 +156,14 @@ int e_obter_prox_num_conta(Escalonador *e)
             
             e->leezu = e->leezu->prox;
             e->count_n_5--; // Conta-se menos um desta rodada
+            if (e->count_n_5 == 0)
+            {
+                e->count_n_1 = e->n_1;
+                e->count_n_2 = e->n_2;
+                e->count_n_3 = e->n_3;
+                e->count_n_4 = e->n_4;
+                e->count_n_5 = e->n_5;
+            }
             return(num_conta);
         }
     }
@@ -469,7 +477,6 @@ int e_conf_por_arquivo (Escalonador *e, char *nome_arq_conf)
     entrada = fopen(nome_arq_conf, "r");
     if (entrada == NULL) 
     {
-        printf("erro arquivo\n");
         return 0;
     }
 
@@ -486,16 +493,20 @@ int e_conf_por_arquivo (Escalonador *e, char *nome_arq_conf)
         if (strcmp(classe, "Premium") == 0) 
         {
             e_inserir_por_fila(e, 1, conta, operacao);
-        } else if (strcmp(classe, "Ouro") == 0) 
+        } 
+        else if (strcmp(classe, "Ouro") == 0) 
         {
             e_inserir_por_fila(e, 2, conta, operacao);
-        } else if (strcmp(classe, "Prata") == 0) 
+        } 
+        else if (strcmp(classe, "Prata") == 0) 
         {
             e_inserir_por_fila(e, 3, conta, operacao);
-        } else if (strcmp(classe, "Bronze") == 0) 
+        } 
+        else if (strcmp(classe, "Bronze") == 0) 
         {
             e_inserir_por_fila(e, 4, conta, operacao);
-        } else if (strcmp(classe, "Leezu") == 0)
+        } 
+        else if (strcmp(classe, "Leezu") == 0)
         {
             e_inserir_por_fila(e, 5, conta, operacao);
         }
@@ -510,6 +521,8 @@ o resultado do processamento para arquivo de nome “nome_arq_out”.
 */
 void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
 {
+    e_conf_por_arquivo(e, nome_arq_in);
+
     int
         tmp_total = 0,  // Conta o tempo de espera dos clientes
 
@@ -531,18 +544,18 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
         tmp_bronze = 0, //|  "é o último tempo de espera de cada classe"
         tmp_leezu = 0,  //|
 
-        num_clients[e->caixas], // Quantidade de clientes atendidos em cada caixa
+        num_clients[e->caixas-1], // Quantidade de clientes atendidos em cada caixa
 
         oper,       // Recebe a quantidade de operações de cada cliente
         classe,     // Recebe a classe de cada cliente
         NumCont,    // Recebe o número de conta de cada cliente
-        Qtd_cx_ocp, // Contador de caixas ocupados
+        Qtd_cx_ocp = 0, // Contador de caixas ocupados
                             //  | O tempo que o caixa com o menor quantidades de operações levará para terminar.
-        tmp_reduzir,        //  | Esse tempo será subtraído do cronômetro de todo caixa
+        tmp_reduzir = 0,        //  | Esse tempo será subtraído do cronômetro de todo caixa
                             //  | Afim de liberar pelo menos um caixa
-        cron_cx[e->caixas]; // Cronômetro de cada caixa, com o tempo que resta p/ terminar de operar
+        cron_cx[e->caixas-1]; // Cronômetro de cada caixa, com o tempo que resta p/ terminar de operar
 
-    for (int i = 0; i <= e->caixas; i++)
+    for (int i = 0; i <= e->caixas-1; i++)
     {
         num_clients[i] = 0;
         cron_cx[i] = 0;
@@ -553,7 +566,7 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
         t_medio_ouro,       //|
         t_medio_prata,      //| Tempo médio de espera de cada classe
         t_medio_bronze,     //|
-        t_medio_leezu;      //|
+        t_medio_leezu,      //|
 
         o_medio_premium,    //|
         o_medio_ouro,       //|
@@ -562,29 +575,29 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
         o_medio_leezu;      //|
 
     FILE *saida;
-    e_conf_por_arquivo(e, nome_arq_in);
 
     saida = fopen(nome_arq_out, "wt");
 
-    
+
     while  (e->premium != NULL || e->ouro != NULL || e->prata != NULL || e->bronze != NULL || e->leezu != NULL)
     {
-        for (int i = 0; i <= e->caixas; i++)
+        tmp_total += tmp_reduzir; // Adiciona o tempo que vai ser reduzido do cronômetro de todos os caixas
+        for (int i = 0; i <= e->caixas-1; i++)
         {   
-            tmp_total += tmp_reduzir;
             if (cron_cx[i] == 0)
             { 
                 num_clients[i]++;
-                cron_cx[i] = e_consultar_tempo_prox();
-                oper = e_consultar_qtd_opr_prox();
-                classe = e_consultar_prox_fila();
-                NumCont = e_obter_prox();
-
+                cron_cx[i] = e_consultar_tempo_prox_cliente(e);
+                oper = e_consultar_prox_qtde_oper(e);
+                classe = e_consultar_prox_fila(e);
+                NumCont = e_obter_prox_num_conta(e);
                 if (classe == 1)
                 {
                     total_cl_prem++;
                     oper_ttl_premium += oper;
-                    printf("T = %d min: Caixa %d chama da categoria Premium cliente da conta %d para realizar %d operacao(oes).", tmp_total, i+1, NumCont, oper);
+
+                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Premium cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
+                    Qtd_cx_ocp++;
                     if (e->premium == NULL)
                     {
                         tmp_prem = tmp_total;
@@ -594,7 +607,8 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
                 {
                     total_cl_ouro++;
                     oper_ttl_ouro += oper;
-                    printf("T = %d min: Caixa %d chama da categoria Ouro cliente da conta %d para realizar %d operacao(oes).", tmp_total, i+1, NumCont, oper);
+                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Ouro cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
+                    Qtd_cx_ocp++;
                     if (e->ouro == NULL)
                     {
                         tmp_ouro = tmp_total;
@@ -604,7 +618,8 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
                 {
                     total_cl_prata;
                     oper_ttl_prata += oper;
-                    printf("T = %d min: Caixa %d chama da categoria Prata cliente da conta %d para realizar %d operacao(oes).", tmp_total, i+1, NumCont, oper);
+                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Prata cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
+                    Qtd_cx_ocp++;
                     if (e->prata == NULL)
                     {
                         tmp_prata = tmp_total;
@@ -614,7 +629,8 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
                 {
                     total_cl_bronze++;
                     oper_ttl_bronze += oper;
-                    printf("T = %d min: Caixa %d chama da categoria Bronze cliente da conta %d para realizar %d operacao(oes).", tmp_total, i+1, NumCont, oper);
+                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Bronze cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
+                    Qtd_cx_ocp++;
                     if (e->premium == NULL)
                     {
                         tmp_bronze = tmp_total;
@@ -624,7 +640,8 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
                 {
                     total_cl_leezu++;
                     oper_ttl_leezu += oper;
-                    printf("T = %d min: Caixa %d chama da categoria Leezu cliente da conta %d para realizar %d operacao(oes).", tmp_total, i+1, NumCont, oper);
+                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Leezu cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
+                    Qtd_cx_ocp++;
                     if (e->leezu == NULL)
                     {
                         tmp_leezu = tmp_total;
@@ -642,21 +659,21 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
             tmp_reduzir = cron_cx[0];
             for (int i = 0; i <= e->caixas-1; i++)
             {
-                if (tmp_reduzir < cron_cx[i])
+                if (tmp_reduzir > cron_cx[i])
                 {
                     tmp_reduzir = cron_cx[i];
                 }
             }
             for (int i = 0; i <= e->caixas-1; i++)
             {
-                cron_cx[i] -= tmp_reduzir; 
+                cron_cx[i] -= tmp_reduzir;
             }
                         
         }
     }
 
-    // FIM DO TXT:
-    fprintf(saida, "Tempo total de atendimento: %d minutos.\n", total_t);
+
+    fprintf(saida, "Tempo total de atendimento: %d minutos.\n", tmp_total);
 
     t_medio_premium = (tmp_prem/total_cl_prem);
     fprintf(saida, "Tempo medio de espera dos %d clientes Premium: %2f\n", total_cl_prem, t_medio_premium);
@@ -684,4 +701,5 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     {
         fprintf(saida, "O caixa de número %d atendeu %d clientes.\n", (i+1), num_clients[i]);
     }
+    fclose(saida);
 }
