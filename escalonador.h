@@ -1,6 +1,7 @@
 #ifndef escalonador_h
 #define escalonador_h
 #include "fila_fifo.h"
+#include "logtree.h"
 
 typedef struct escalonador
 {
