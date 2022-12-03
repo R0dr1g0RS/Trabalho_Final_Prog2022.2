@@ -589,7 +589,7 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
                 oper = e_consultar_prox_qtde_oper(e);
                 classe = e_consultar_prox_fila(e);
                 NumCont = e_obter_prox_num_conta(e);
-                log_registrar(&clientes, NumCont, classe, cron_cx[i], i+1);
+                log_registrar(&clientes, NumCont, classe, tmp_total, i+1);
                 if (classe == 1)
                 {
                     oper_ttl_premium += oper;
@@ -653,7 +653,6 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     tmp_reduzir = cron_cx[0];
     for (int i = 0; i <= e->caixas-1; i++)
     {   
-        fprintf(saida, "%d\n", cron_cx[i]);
         if (tmp_reduzir < cron_cx[i])
         {
             tmp_reduzir = cron_cx[i];   //  Tempo que falta para encerrarem todos os atendimentos
