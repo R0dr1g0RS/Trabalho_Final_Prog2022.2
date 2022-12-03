@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "escalonador.h"
-
+#include "logtree.h"
 
 // Desenvolver  um  escalonador  de  filas  que  trata  de  forma  diferenciada  5  filas,  com  as  características  de 
 // disciplina  citadas  no  enunciado  do  trabalho.  
