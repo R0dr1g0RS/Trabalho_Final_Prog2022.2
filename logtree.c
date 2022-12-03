@@ -59,7 +59,6 @@ float log_media_por_classe(Log **l, int classe) {
 
     return tempo_medio;
 }
-
 int log_obter_soma_por_classe(Log **l, int classe){
     int esq, dir;
 
@@ -68,8 +67,10 @@ int log_obter_soma_por_classe(Log **l, int classe){
     }
     esq = log_obter_soma_por_classe(&(*l)->esquerda,classe);
     dir = log_obter_soma_por_classe(&(*l)->direita,classe);
-
-    return (*l)->timer + esq + dir;
+    if (classe != (*l)->conta_classe)
+        return 0 + esq + dir;
+    else
+        return (*l)->timer + esq + dir;
 }
 
 int log_obter_contagem_por_classe(Log **l, int classe){
@@ -81,5 +82,8 @@ int log_obter_contagem_por_classe(Log **l, int classe){
     esq = log_obter_contagem_por_classe(&(*l)->esquerda,classe);
     dir = log_obter_contagem_por_classe(&(*l)->direita,classe);
 
-    return 1 + esq + dir;
+    if (classe != (*l)->conta_classe)
+        return 0 + esq + dir;
+    else
+        return 1 + esq +dir;
 }
