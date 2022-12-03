@@ -530,7 +530,7 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     int
         tmp_total = 0,  // Conta o tempo de espera dos clientes
 
-        num_clients[e->caixas-1], // Quantidade de clientes atendidos em cada caixa
+        num_clients_cx[e->caixas], // Quantidade de clientes atendidos em cada caixa
 
         oper,       // Recebe a quantidade de operações de cada cliente
         classe,     // Recebe a classe de cada cliente
@@ -541,118 +541,90 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
                             //  |               Afim de liberar pelo menos um caixa
         cron_cx[e->caixas-1]; // Cronômetro de cada caixa, com o tempo que resta p/ terminar de operar
 
-    for (int i = 0; i <= e->caixas-1; i++)
+    for (int i = 0; i < e->caixas; i++)
     {
-        num_clients[i] = 0;
         cron_cx[i] = 0;
     }
 
     float 
-        t_medio_premium,    //|
-        t_medio_ouro,       //|
-        t_medio_prata,      //| Tempo médio de espera de cada classe
-        t_medio_bronze,     //|
-        t_medio_leezu,      //|
+        t_medio_[5],    // Tempo médio de espera de cada classe
 
-        total_cl_prem = 0,      //|
-        total_cl_ouro = 0,      //|
-        total_cl_prata = 0,     //| Quantidade de clientes por classe
-        total_cl_bronze = 0,    //|
-        total_cl_leezu = 0,     //|
+        total_cl_[5],   // Quantidade de clientes por classe
 
-        oper_ttl_premium =0,    //|
-        oper_ttl_ouro =0,       //|
-        oper_ttl_prata =0,      //| Quantidade de operações totais por classe
-        oper_ttl_bronze =0,     //|
-        oper_ttl_leezu =0,      //|
+        oper_ttl_[5],   // Quantidade de operações totais por classe
 
-        o_medio_premium,    //|
-        o_medio_ouro,       //|
-        o_medio_prata,      //| Quantidade média de operações de cada classe
-        o_medio_bronze,     //|
-        o_medio_leezu;      //|
+        o_medio_[5];    // Quantidade média de operações de cada classe
+
+    for (int i = 0; i < 5; i++)
+    {
+        oper_ttl_[i] = 0;
+        total_cl_[i] = 0;
+        o_medio_[i] = 0;
+        t_medio_[i] = 0;
+    }
+
+    char
+        class[5][8];
+    class[0][0] = 'P'; class[0][1] = 'r'; class[0][2] = 'e'; class[0][3] = 'm'; class[0][4] = 'i'; class[0][5] = 'u'; class[0][6] = 'm'; class[0][7] = '\0';   
+    class[1][0] = 'O'; class[1][1] = 'u'; class[1][2] = 'r'; class[1][3] = 'o'; class[1][4] = '\0';
+    class[2][0] = 'P'; class[2][1] = 'r'; class[2][2] = 'a'; class[2][3] = 't'; class[2][4] = 'a'; class[2][5] = '\0';
+    class[3][0] = 'B'; class[3][1] = 'r'; class[3][2] = 'o'; class[3][3] = 'n'; class[3][4] = 'z'; class[3][5] = 'e'; class[3][6] = '\0';
+    class[4][0] = 'L'; class[4][1] = 'e'; class[4][2] = 'e'; class[4][3] = 'z'; class[4][4] = 'u'; class[4][5] = '\0';
 
     FILE *saida;
 
     saida = fopen(nome_arq_out, "wt");
 
-
-    while  (e->premium != NULL || e->ouro != NULL || e->prata != NULL || e->bronze != NULL || e->leezu != NULL)
+    while (e_consultar_prox_fila(e) != -1)
     {
-        tmp_total += tmp_reduzir; // Adiciona o tempo que vai ser reduzido do cronômetro de todos os caixas
-        for (int i = 0; i <= e->caixas-1; i++)
-        {   
-            if (cron_cx[i] == 0)
-            { 
-                num_clients[i]++;
-                cron_cx[i] = e_consultar_tempo_prox_cliente(e);
-                oper = e_consultar_prox_qtde_oper(e);
-                classe = e_consultar_prox_fila(e);
-                NumCont = e_obter_prox_num_conta(e);
-                log_registrar(&clientes, NumCont, classe, tmp_total, i+1);
-                if (classe == 1)
-                {
-                    oper_ttl_premium += oper;
-
-                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Premium cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
-                    Qtd_cx_ocp++;
-                }
-                if (classe == 2)
-                {
-                    oper_ttl_ouro += oper;
-
-                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Ouro cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
-                    Qtd_cx_ocp++;
-                }
-                if (classe == 3)
-                {
-                    oper_ttl_prata += oper;
-
-                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Prata cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
-                    Qtd_cx_ocp++;   
-                }
-                if (classe == 4)
-                {
-                    oper_ttl_bronze += oper;
-                 
-                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Bronze cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
-                    Qtd_cx_ocp++;
-                }
-                if (classe == 5)
-                {
-                    oper_ttl_leezu += oper;
-                 
-                    fprintf(saida, "T = %d min: Caixa %d chama da categoria Leezu cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, NumCont, oper);
-                    Qtd_cx_ocp++;
-                }
-            }
-            else
-            {
-                Qtd_cx_ocp++;
-            }
-        }
-        if (Qtd_cx_ocp == e->caixas && classe != -1)
+        if (Qtd_cx_ocp == e->caixas)
         {
             Qtd_cx_ocp = 0;
             tmp_reduzir = cron_cx[0];
-            for (int i = 0; i <= e->caixas-1; i++)
+            for (int i = 0; i < e->caixas; i++)
             {
                 if (tmp_reduzir > cron_cx[i])
                 {
                     tmp_reduzir = cron_cx[i];
                 }
             }
-            for (int i = 0; i <= e->caixas-1; i++)
+            for (int k = 0; k < e->caixas; k++)
             {
-                cron_cx[i] -= tmp_reduzir;
+                cron_cx[k] -= tmp_reduzir;
+                if (cron_cx[k] != 0)
+                {
+                    Qtd_cx_ocp++;
+                }
             }
-                        
+            
         }
+        
+        tmp_total += tmp_reduzir;
+        for (int i = 0; i < e->caixas; i++)
+        {
+            if (cron_cx[i] == 0 && e_consultar_prox_fila(e) != -1)
+            {
+                classe = e_consultar_prox_fila(e);
+                oper = e_consultar_prox_qtde_oper(e);
+                cron_cx[i] = e_consultar_tempo_prox_cliente(e);
+                NumCont = e_obter_prox_num_conta(e);
+                Qtd_cx_ocp++;
+                log_registrar(&clientes, NumCont, classe, tmp_total, i+1);
+                for (int k = 0; k < 6; k++)
+                {
+                    if (classe-1 == k)
+                    {
+                        oper_ttl_[k] += oper;
+                        fprintf(saida, "T = %d min: Caixa %d chama da categoria %s cliente da conta %d para realizar %d operacao(oes).\n", tmp_total, i+1, class[k], NumCont, oper);
+                    }
+                }
+            }
+        }            
     }
 
     tmp_reduzir = cron_cx[0];
     for (int i = 0; i <= e->caixas-1; i++)
-    {   
+    {
         if (tmp_reduzir < cron_cx[i])
         {
             tmp_reduzir = cron_cx[i];   //  Tempo que falta para encerrarem todos os atendimentos
@@ -662,41 +634,26 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
 
     fprintf(saida, "Tempo total de atendimento: %d minutos.\n", tmp_total);
 
-    t_medio_premium = log_media_por_classe(&clientes, 1);
-    t_medio_ouro = log_media_por_classe(&clientes, 2);
-    t_medio_prata = log_media_por_classe(&clientes, 3);
-    t_medio_bronze = log_media_por_classe(&clientes, 4);
-    t_medio_leezu = log_media_por_classe(&clientes, 5);
-    
-    total_cl_prem = log_obter_contagem_por_classe(&clientes, 1);
-    total_cl_ouro = log_obter_contagem_por_classe(&clientes, 2);
-    total_cl_prata = log_obter_contagem_por_classe(&clientes, 3);
-    total_cl_bronze = log_obter_contagem_por_classe(&clientes, 4);
-    total_cl_leezu = log_obter_contagem_por_classe(&clientes, 5);
 
-    fprintf(saida, "Tempo medio de espera dos %.0f clientes Premium: %.2f\n", total_cl_prem, t_medio_premium);
-    fprintf(saida, "Tempo medio de espera dos %.0f clientes Ouro: %.2f\n", total_cl_ouro, t_medio_ouro);
-    fprintf(saida, "Tempo medio de espera dos %.0f clientes Prata: %.2f\n", total_cl_prata, t_medio_prata);
-    fprintf(saida, "Tempo medio de espera dos %.0f clientes Bronze: %.2f\n", total_cl_bronze, t_medio_bronze);
-    fprintf(saida, "Tempo medio de espera dos %.0f clientes Comuns: %.2f\n", total_cl_leezu, t_medio_leezu);
-
-    
-    
-    o_medio_premium = (oper_ttl_premium/total_cl_prem);
-    o_medio_ouro = (oper_ttl_ouro/total_cl_ouro);
-    o_medio_prata = (oper_ttl_prata/total_cl_prata);
-    o_medio_bronze = (oper_ttl_bronze/total_cl_bronze);
-    o_medio_leezu = (oper_ttl_leezu/total_cl_leezu);
-
-    fprintf(saida, "Quantidade media de operacoes por cliente Premium = %.2f\n", o_medio_premium);
-    fprintf(saida, "Quantidade media de operacoes por cliente Ouro = %.2f\n", o_medio_ouro);
-    fprintf(saida, "Quantidade media de operacoes por cliente Prata = %.2f\n", o_medio_prata);
-    fprintf(saida, "Quantidade media de operacoes por cliente Bronze = %.2f\n", o_medio_bronze);
-    fprintf(saida, "Quantidade media de operacoes por cliente Leezu = %.2f\n", o_medio_leezu);
-    
-    for (int i = 0; i <= e->caixas-1; i++)
+    for (int i = 0; i < 5; i++)
     {
-        fprintf(saida, "O caixa de número %d atendeu %d clientes.\n", (i+1), num_clients[i]);
+        t_medio_[i] = log_media_por_classe(&clientes, i+1);
+        total_cl_[i] = log_obter_contagem_por_classe(&clientes, i+1);
+        fprintf(saida, "Tempo medio de espera dos %.0f clientes %s: %.2f\n", total_cl_[i], class[i], t_medio_[i]);    
+
+        o_medio_[i] = (oper_ttl_[i]/total_cl_[i]);    
+    }
+    
+
+    for (int i = 0; i < 5; i++)
+    {
+        fprintf(saida, "Quantidade media de operacoes por cliente %s = %.2f\n", class[i], o_medio_[i]);    
+    }
+
+    for (int i = 0; i < e->caixas; i++)
+    {
+        num_clients_cx[i] = log_obter_contagem_por_caixa(&clientes, i+1);
+        fprintf(saida, "O caixa de número %d atendeu %d clientes.\n", (i+1), num_clients_cx[i]);
     }
     fclose(saida);
 }
