@@ -21,3 +21,4 @@ int log_obter_soma_por_classe(Log **, int);
 
 int log_obter_contagem_por_classe(Log **, int);
 
+int log_obter_contagem_por_caixa(Log **l, int caixa);

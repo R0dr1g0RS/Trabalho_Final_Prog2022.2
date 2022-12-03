@@ -87,3 +87,19 @@ int log_obter_contagem_por_classe(Log **l, int classe){
     else
         return 1 + esq +dir;
 }
+
+int log_obter_contagem_por_caixa(Log **l, int caixa)
+{
+    int esq, dir;
+
+    if (*l == NULL){
+        return 0;
+    }
+    esq = log_obter_contagem_por_caixa(&(*l)->esquerda, caixa);
+    dir = log_obter_contagem_por_caixa(&(*l)->direita, caixa);
+
+    if (caixa != (*l)->caixa_num)
+        return 0 + esq + dir;
+    else
+        return 1 + esq +dir;
+};
