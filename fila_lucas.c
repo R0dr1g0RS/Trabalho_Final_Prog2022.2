@@ -106,7 +106,7 @@ int f_num_elementos (Fila_FIFO **f)
 int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao)
 {
     Fila_FIFO *no = *f;
-    int posicao_aux, int chave;
+    int posicao_aux, chave;
     
     posicao_aux = 1; // A posição se inicia em 1;
     while(no != NULL && posicao_aux != posicao) // Enquanto o nó for não-nulo e a posicao_aux
@@ -126,7 +126,7 @@ int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao)
 int f_consultar_valor_por_posicao (Fila_FIFO **f, int posicao) 
 {
     Fila_FIFO *no = *f;
-    int posicao_aux, int valor;
+    int posicao_aux, valor;
     
     posicao_aux = 1; // A posição se inicia em 1;
     while(no != NULL && posicao_aux != posicao) // Enquanto o nó for não-nulo e a posicao_aux
