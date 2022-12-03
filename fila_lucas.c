@@ -106,7 +106,7 @@ int f_num_elementos (Fila_FIFO **f)
 int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao)
 {
     Fila_FIFO *no = *f;
-    int posicao_aux;
+    int posicao_aux, int chave;
     
     posicao_aux = 1; // A posição se inicia em 1;
     while(no != NULL && posicao_aux != posicao) // Enquanto o nó for não-nulo e a posicao_aux
@@ -116,7 +116,8 @@ int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao)
     }
     if (no == NULL) // Se o nó for nulo, a posição desejada não existe na fila;
         return -1;
-    return no->NumCon; // Retorna a chave do nó na posição desejada da fila.
+    chave = no->NumCon;
+    return chave; // Retorna a chave do nó na posição desejada da fila.
 }
 
 
@@ -125,7 +126,7 @@ int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao)
 int f_consultar_valor_por_posicao (Fila_FIFO **f, int posicao) 
 {
     Fila_FIFO *no = *f;
-    int posicao_aux;
+    int posicao_aux, int valor;
     
     posicao_aux = 1; // A posição se inicia em 1;
     while(no != NULL && posicao_aux != posicao) // Enquanto o nó for não-nulo e a posicao_aux
@@ -135,7 +136,8 @@ int f_consultar_valor_por_posicao (Fila_FIFO **f, int posicao)
     }
     if (no == NULL) // Se o nó for nulo, a posição desejada não existe na fila;
         return -1;
-    return no->QntOp; // Retorna o valor do nó na posição desejada da fila.
+    valor = no->QntOp;
+    return valor; // Retorna o valor do nó na posição desejada da fila.
 }
 
 
