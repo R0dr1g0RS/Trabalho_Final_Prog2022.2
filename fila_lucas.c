@@ -1,139 +1,148 @@
 #include "fila_fifo.h"
 
 
-void f_inicializar(Fila_FIFO **f) {
-    *f = NULL;
+// Inicializa a fila.
+void f_inicializar(Fila_FIFO **f) 
+{
+    *f = NULL; //Inicializa a fila.
 }
 
-int f_inserir (Fila_FIFO **f, int chave, int valor) {
-    Fila_FIFO *novo_no, *aux;
+
+// Insere um determinado valor inteiro indexado por um valor de chave na fila. Retorna 1 se a inserção for bem
+// sucedida e 0 se houver algum problema (duplicação de chave ou falta de memória).
+int f_inserir (Fila_FIFO **f, int chave, int valor) 
+{
+    Fila_FIFO *novo_no, *no;
     int num_nos, compara_chave;
-    num_nos = f_num_elementos(f); //Numero de nós na fila
+    
+    num_nos = f_num_elementos(f); //Numero de nós na fila;
 
-
-    //Verificar se existe alguma chave repetida
-    if(num_nos != 0) { //Se a fila estiver vazia não precisa verificar
-        while(num_nos != 0) {
-            //Compara a chave do novo_nó com as chaves na fila, de trás pra frente;
+    // 1. Verificar se existe alguma chave repetida:
+    if(num_nos != 0) // Se a fila estiver vazia, não precisa verificar;
+    { 
+        while(num_nos != 0) 
+        {
+            //Compara a chave de novo_no com as chaves na fila, de trás pra frente;
             compara_chave = f_consultar_chave_por_posicao(f,num_nos);
-            if(compara_chave == chave){
-                return 0;
-            }
+            if(compara_chave == chave)
+                return 0; // Se a chave for repetida, retorna 0;
             num_nos--;
         }
     }
 
-    //Colocar os dados na struct;
+    // 2. Colocar os dados na struct:
     novo_no = malloc(sizeof(Fila_FIFO));
-    if(novo_no == NULL){
-        return 0;
-    }
-    novo_no->conta = chave;
-    novo_no->qntd_ope = valor;
+    if(novo_no == NULL)
+        return 0; // Se houver falta de memória, retorna 0;
+    novo_no->NumCon = chave;
+    novo_no->QntOp = valor;
 
-
-    if (*f == NULL) { //Se a fila estiver vazia;
+    if (*f == NULL) 
+    { //Se a fila estiver vazia;
         novo_no->prox = NULL;
         *f = novo_no;
         return 1;
     }
-
-    aux = *f;
-    while(aux->prox != NULL)
-        aux = aux->prox;
-    novo_no->prox = aux->prox;
-    aux->prox = novo_no;
+    no = *f;
+    while(no->prox != NULL) // Se a fila não estiver vazia, percorre ela 
+        no = no->prox;     // e coloca o novo elemento no final da fila.
+    novo_no->prox = no->prox;
+    no->prox = novo_no;
     return 1;
-
 }
-
 
 
 //Retorna o número de chave do próximo elemento da fila, retirando-o da fila. Retorna -1 se a fila estiver vazia.
-int f_obter_proxima_chave (Fila_FIFO **f) {
-    Fila_FIFO *no;
-    no = *f;
-    if(no == NULL)
-    {
-        return -1;
-    }
-    *f = no->prox;
-    return no->conta;
+int f_obter_proxima_chave (Fila_FIFO **f) 
+{
+    Fila_FIFO *no = *f;
+    
+    if(no == NULL) // Se a fila estiver vazia, retorna -1;
+        return -1; 
+    *f = no->prox; // O primeiro nó da fila é retirado e o próximo nó passa a ser o primeiro;
+    return no->NumCon; // Retorna a proxima chave da fila.
 }
+
 
 //Retorna a chave do elemento que está na cabeça da fila, sem retirá-lo da fila.
 int f_consultar_proxima_chave (Fila_FIFO **f)
 {
-    Fila_FIFO *no;
+    Fila_FIFO *no = *f;
 
-    no = *f;
-    if(no == NULL)
-    {
+    if(no == NULL) // Se a fila estiver vazia, retorna -1;
         return -1;
-    }
-    return no->conta;
+    return no->NumCon; // Retorna a proxima chave da fila.
 }
+
 
 //Retorna o valor armazenado no elemento que está na cabeça da fila, sem retirá-lo da fila.
 int f_consultar_proximo_valor (Fila_FIFO **f)
 {
-    Fila_FIFO *no;
+    Fila_FIFO *no = *f;
 
-    no = *f;
-    if(no == NULL)
-    {
+    if(no == NULL) // Se a fila estiver vazia, retorna -1;
         return -1;
-    }
-    return no->qntd_ope;
+    return no->QntOp; // Retorna a proxima valor da fila.
 }
+
 
 //Retorna o número de elementos presentes na fila.
-int f_num_elementos (Fila_FIFO **f){
-    Fila_FIFO *aux;
+int f_num_elementos (Fila_FIFO **f)
+{
+    Fila_FIFO *no = *f;
     int count = 0;
 
-    aux = *f;
-
-    if(aux == NULL){
-        return count;
+    while(no != NULL) 
+    {
+        count++; // Adiciona +1 ao contador para cada nó não-nulo;
+        no = no->prox;
     }
-    else {
-        while(aux != NULL) {
-            count++;
-            aux = aux->prox;
-        }
-        return count;
-    }
+    return count; // retorna o numéro de elementos.
 }
+
 
 //Retorna a chave do posicao-ésimo elemento da fila. Caso não exista a posição desejada,
 //retornar -1. A posição se inicia em 1.
-int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao){
-    Fila_FIFO *aux = *f;
-    int chave, posicao_aux;
-    posicao_aux = 1; //1
-    while(aux != NULL &&posicao_aux != posicao) {
-        aux = aux->prox;
+int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao)
+{
+    Fila_FIFO *no = *f;
+    int posicao_aux;
+    
+    posicao_aux = 1; // A posição se inicia em 1;
+    while(no != NULL && posicao_aux != posicao) // Enquanto o nó for não-nulo e a posicao_aux
+    {                                           // for diferente de posicao ele percorre a fila;
+        no = no->prox;
         posicao_aux++;
     }
-    if (aux == NULL)
+    if (no == NULL) // Se o nó for nulo, a posição desejada não existe na fila;
         return -1;
-    else {
-        chave = aux->conta;
-        return chave;
-    }
+    return no->NumCon; // Retorna a chave do nó na posição desejada da fila.
 }
 
 
-int f_consultar_valor_por_posicao (Fila_FIFO **f, int posicao) {
+//Retorna o valor do posicao-ésimo elemento da fila. Caso não exista a posição desejada,
+//retornar -1. A posição se inicia em 1.
+int f_consultar_valor_por_posicao (Fila_FIFO **f, int posicao) 
+{
+    Fila_FIFO *no = *f;
+    int posicao_aux;
     
+    posicao_aux = 1; // A posição se inicia em 1;
+    while(no != NULL && posicao_aux != posicao) // Enquanto o nó for não-nulo e a posicao_aux
+    {                                           // for diferente de posicao ele percorre a fila;
+        no = no->prox;
+        posicao_aux++;
+    }
+    if (no == NULL) // Se o nó for nulo, a posição desejada não existe na fila;
+        return -1;
+    return no->QntOp; // Retorna o valor do nó na posição desejada da fila.
 }
 
 
-void percorrer(Fila_FIFO *f) {
+void percorrer(Fila_FIFO *f) { // Essa função vai ser removida é so pra testar
     Fila_FIFO *aux = f;
     while (aux != NULL){
-        printf("\n\nConta: %d\nOperaçẽos: %d\n\n", aux->conta, aux->qntd_ope);
+        printf("\nConta: %d\nOperacoes: %d\n", aux->NumCon, aux->QntOp);
         aux = aux->prox;
     }
 }
