@@ -638,8 +638,15 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     {
         t_medio_[i] = log_media_por_classe(&clientes, i+1);
         total_cl_[i] = log_obter_contagem_por_classe(&clientes, i+1);
-        fprintf(saida, "Tempo medio de espera dos %.0f clientes %s: %.2f\n", total_cl_[i], class[i], t_medio_[i]);    
-
+        if (i != 4)
+        {
+            fprintf(saida, "Tempo medio de espera dos %.0f clientes %s: %.2f\n", total_cl_[i], class[i], t_medio_[i]);    
+        }
+        else
+        {
+            fprintf(saida, "Tempo medio de espera dos %.0f clientes Comuns: %.2f\n", total_cl_[i], t_medio_[i]);    
+        }
+        
         o_medio_[i] = (oper_ttl_[i]/total_cl_[i]);    
     }
     
