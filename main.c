@@ -8,6 +8,10 @@ int main(int argc, char * argv[]) {
     char *nome_ent = (char*)malloc(sizeof(char) * 16), *nome_sai = (char*)malloc(sizeof(char) * 14);
     char nulo[4] = "0", *num_arq = (char*)malloc(sizeof(char) * 4);
     Escalonador *e = (Escalonador*)malloc(sizeof(Escalonador));
+    
+    nome_ent[0] = '\0'; 
+    nome_sai[0] = '\0'; 
+
 
     if(strlen(argv[1]) == 4)
     {
