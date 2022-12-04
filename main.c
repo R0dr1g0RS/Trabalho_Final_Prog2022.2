@@ -5,9 +5,9 @@
 
 
 int main(int argc, char * argv[]) {
-    struct escalonador e;
     char *nome_ent = (char*)malloc(sizeof(char) * 16), *nome_sai = (char*)malloc(sizeof(char) * 14);
     char nulo[4] = "0", *num_arq = (char*)malloc(sizeof(char) * 4);
+    Escalonador *e = (Escalonador*)malloc(sizeof(Escalonador));
 
     if(strlen(argv[1]) == 4)
     {
@@ -34,7 +34,7 @@ int main(int argc, char * argv[]) {
         strcat(nome_sai, ".txt");
     }
     
-    e_rodar(&e, nome_ent, nome_sai);    /*Rodar o programa*/
+    e_rodar(e, nome_ent, nome_sai);    /*Rodar o programa*/
 
     return EXIT_SUCCESS;
 }
