@@ -527,6 +527,7 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     log_inicializar(&clientes);
 
     int
+        i, k,   // Índices
         tmp_total = 0,  // Conta o tempo de espera dos clientes
 
         num_clients_cx[e->caixas], // Quantidade de clientes atendidos em cada caixa
@@ -580,14 +581,14 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
         {
             Qtd_cx_ocp = 0;
             tmp_reduzir = cron_cx[0];
-            for (int i = 0; i < e->caixas; i++)
+            for (i = 0; i < e->caixas; i++)
             {
                 if (tmp_reduzir > cron_cx[i])
                 {
                     tmp_reduzir = cron_cx[i];
                 }
             }
-            for (int k = 0; k < e->caixas; k++)
+            for (k = 0; k < e->caixas; k++)
             {
                 cron_cx[k] -= tmp_reduzir;
                 if (cron_cx[k] != 0)
@@ -599,7 +600,7 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
         }
         
         tmp_total += tmp_reduzir;
-        for (int i = 0; i < e->caixas; i++)
+        for (i = 0; i < e->caixas; i++)
         {
             if (cron_cx[i] == 0 && e_consultar_prox_fila(e) != -1)
             {
@@ -609,7 +610,7 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
                 NumCont = e_obter_prox_num_conta(e);
                 Qtd_cx_ocp++;
                 log_registrar(&clientes, NumCont, classe, tmp_total, i+1);
-                for (int k = 0; k < 6; k++)
+                for (k = 0; k < 6; k++)
                 {
                     if (classe-1 == k)
                     {
@@ -622,7 +623,7 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     }
 
     tmp_reduzir = cron_cx[0];
-    for (int i = 0; i <= e->caixas-1; i++)
+    for (i = 0; i <= e->caixas-1; i++)
     {
         if (tmp_reduzir < cron_cx[i])
         {
@@ -634,7 +635,7 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     fprintf(saida, "Tempo total de atendimento: %d minutos.\n", tmp_total);
 
 
-    for (int i = 0; i < 5; i++)
+    for (i = 0; i < 5; i++)
     {
         t_medio_[i] = log_media_por_classe(&clientes, i+1);
         total_cl_[i] = log_obter_contagem_por_classe(&clientes, i+1);
@@ -651,12 +652,12 @@ void e_rodar (Escalonador *e, char *nome_arq_in, char *nome_arq_out)
     }
     
 
-    for (int i = 0; i < 5; i++)
+    for (i = 0; i < 5; i++)
     {
         fprintf(saida, "Quantidade media de operacoes por cliente %s = %.2f\n", class[i], o_medio_[i]);    
     }
 
-    for (int i = 0; i < e->caixas; i++)
+    for (i = 0; i < e->caixas; i++)
     {
         num_clients_cx[i] = log_obter_contagem_por_caixa(&clientes, i+1);
         fprintf(saida, "O caixa de número %d atendeu %d clientes.\n", (i+1), num_clients_cx[i]);
