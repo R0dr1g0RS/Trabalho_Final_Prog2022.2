@@ -10,14 +10,13 @@ typedef struct escalonador
         caixas, // Numero de Caixas
         n_1, n_2, n_3, n_4, n_5, // Disciplina de atendimento < ESTÁTICO >
         count_n_1, count_n_2, count_n_3, count_n_4, count_n_5; // Contadores para as filas < VOLÁTIL >
-    Fila_FIFO
+    Fila_FIFO // Início das filas.
         *premium,
         *ouro,
         *prata,
         *bronze,
         *leezu;
 } Escalonador;
-
 
 void e_inicializar(Escalonador *e, int caixas, int delta_t, int n_1, int n_2, int n_3, int n_4, int n_5);
 
