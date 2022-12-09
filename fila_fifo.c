@@ -17,28 +17,33 @@ int f_inserir (Fila_FIFO **f, int chave, int valor)
 {
     Fila_FIFO *novo, *no;
     
-    novo = (Fila_FIFO*)malloc(sizeof(Fila_FIFO));  // Alocação de memória
+    novo = (Fila_FIFO*)malloc(sizeof(Fila_FIFO));  // Alocação de memória.
     if(novo == NULL)       
     {
         return 0;
     }
     
     novo->NumCon = chave;
-    novo->QntOp = valor;   // Inserindo a chave e o valor
+    novo->QntOp = valor;   // Inserindo a chave e o valor.
     novo->prox = NULL;
     
-    if(*f == NULL)
+    if(*f == NULL)  // Se a fila estiver vazia
     {
-        *f = novo;
+        *f = novo;  // Coloca o novo nó no início da fila.
         return 1;
     }
-    no = *f;     // Ponteiro auxiliar para percorrer a fila
+    no = *f;     // Ponteiro auxiliar para percorrer a fila.
     while(no->prox != NULL)
     {
+        if(no->NumCon == chave) // Testa se a chave nova é repetida. Se sim, retorna erro.
+        {
+            free(novo); // libera o espaço alocado.
+            return 0;  
+        }
         no = no->prox;
     }
-    novo->prox = no->prox;
-    no->prox = novo;
+    novo->prox = no->prox;  // Coloca o novo nó no final da fila.
+    no->prox = novo;        
     return 1;
 }
 
@@ -49,14 +54,13 @@ Retorna -1 se a fila estiver vazia.
 */
 int f_obter_proxima_chave (Fila_FIFO **f)
 {
-    Fila_FIFO *no;
+    Fila_FIFO *no = *f;
     
-    no = *f;
     if(no == NULL)
     {
         return -1;
     }
-    *f = no->prox;
+    *f = no->prox;   // O proximo nó passa a ser o primeiro da fila.
     return no->NumCon;
 }
 
@@ -66,9 +70,8 @@ Retorna a chave do elemento que está na cabeça da fila, sem retirá-lo da fila
 */
 int f_consultar_proxima_chave (Fila_FIFO **f)
 {
-    Fila_FIFO *no;
+    Fila_FIFO *no = *f;
     
-    no = *f;
     if(no == NULL)
     {
         return -1;
@@ -82,9 +85,8 @@ Retorna o valor armazenado no elemento que está na cabeça da fila, sem retirá
 */
 int f_consultar_proximo_valor (Fila_FIFO **f)
 {
-    Fila_FIFO *no;
+    Fila_FIFO *no = *f;
     
-    no = *f;
     if(no == NULL)
     {
         return -1;
@@ -99,10 +101,9 @@ Retorna o número de elementos presentes na fila.
 int f_num_elementos (Fila_FIFO **f)
 {
     int i = 0;
-    Fila_FIFO *no;
+    Fila_FIFO *no = *f;
     
-    no = *f;
-    while(no != NULL)
+    while(no != NULL)   // Percorre a fila e soma i + 1 para cada elemento da fila.
     {
         i++;
         no = no->prox;
@@ -118,16 +119,15 @@ A posição se inicia em 1.
 int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao)
 {
     int i = 1;
-    Fila_FIFO *no;
+    Fila_FIFO *no = *f;
     
-    no = *f;
-    while(no != NULL && i < posicao)
+    while(no != NULL && i < posicao)  // Percorre a fila até chegar na posição desejada.
     {
         i++;
         no = no->prox;
     }
-    if(no == NULL)
-    {
+    if(no == NULL)   // Se a posição não estiver presente na fila, retorna -1.
+    {                
         return -1;
     }
     return no->NumCon;
@@ -141,70 +141,16 @@ A posição se inicia em 1.
 int f_consultar_valor_por_posicao (Fila_FIFO **f, int posicao)
 {
     int i = 1;
-    Fila_FIFO *no;
+    Fila_FIFO *no = *f;
     
-    no = *f;
-    while(no != NULL && i < posicao)
+    while(no != NULL && i < posicao) // Percorre a fila até chegar na posição desejada.
     {
         i++;
         no = no->prox;
     }
-    if(no == NULL)
+    if(no == NULL)  // Se a posição não estiver presente na fila, retorna -1.
     {
         return -1;
     }
     return no->QntOp;
-}
-
-
-/*
-percorre a lista até chegar ao fim dela listando as informaçoes presente em cada no.
-*/
-void percorrer(Fila_FIFO *f)
-{
-    Fila_FIFO *inicio = f;
-    
-    while(inicio != NULL)
-    {
-        printf("Numero da Conta:%d\nQuantida de Operaçoes:%d\n\n", inicio->NumCon, inicio->QntOp);
-        inicio = inicio->prox;
-    }
-}
-
-
-/*
-lê o arquivo recebendo cada parâmetro passado.
-*/
-int ler_arq(char *arq_nome)
-{
-    FILE *arq;
-    int caixa, tempo;
-    int e_1, e_2, e_3, e_4, e_5; //disciplina de atendimento para cada classe de conta;
-    int num_conta, num_operacoes;
-    char classe_conta[8];
-
-    arq = fopen(arq_nome, "r");
-
-    if (arq == NULL){
-        printf("Nao foi possivel ler o arquivo\n");
-        return 0;
-    }
-
-    fscanf(arq, "qtde de caixas = %d\n", &caixa);
-    printf("Quantidade de caixas: %d\n", caixa);
-    fscanf(arq, "delta t = %d\n", &tempo);
-    printf("Delta T: %d\n", tempo);
-    fscanf(arq,"disciplina de escalonamento = {%d,%d,%d,%d,%d}\n", &e_1, &e_2,&e_3, &e_4, &e_5);
-    printf("E1: %d\n", e_1);
-    printf("E2: %d\n", e_2);
-    printf("E3: %d\n", e_3);
-    printf("E4: %d\n", e_4);
-    printf("E5: %d\n", e_5);
-
-    while(fscanf(arq,"%s - conta %d - %d operacao(oes)", classe_conta, &num_conta , &num_operacoes) != EOF){
-        printf("Classe: %s\n", classe_conta);
-        printf("Conta: %d\n", num_conta);
-        printf("Operações: %d\n", num_operacoes);
-    }
-    return 1;
 }
