@@ -1,3 +1,6 @@
+#ifndef fila_fifo_h
+#define fila_fifo_h
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,6 +29,4 @@ int f_consultar_chave_por_posicao (Fila_FIFO **f, int posicao);
 
 int f_consultar_valor_por_posicao (Fila_FIFO **f, int posicao);
 
-void percorrer(Fila_FIFO *f);      /*eu vou tirar essa funçao depois, é mais para gente testar as filas*/
-
-int ler_arq(char *arq_nome);
+#endif
