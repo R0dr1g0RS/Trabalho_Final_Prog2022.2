@@ -5,11 +5,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct _arvore {
-    int conta_num, conta_classe, timer, caixa_num;
-    struct _arvore *direita, *esquerda;
+typedef struct _arvore 
+{
+    int 
+        conta_num,  // Número da conta do cliente.
+        conta_classe,  // Número da classe do cliente.
+        timer,   // Tempo de espera do cliente.
+        caixa_num;  // Número do caixa no qual o cliente foi atendido.
+    struct _arvore 
+        *direita,  // Filho direito do elemento na árvore
+        *esquerda; // Filho esquerdo do elemento na árvore
 }Log;
-
 
 void log_inicializar(Log **);
 
