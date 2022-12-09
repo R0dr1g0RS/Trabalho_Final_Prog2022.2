@@ -1,3 +1,9 @@
+/*
+NOMES DOS PARTICIPANTES DO GRUPO:
+1.Rodrigo Rodrigues Santos - 539105;
+2.Lucas Lopes de Sousa - 537512;
+3.Guilherme Gomes Botelho - 539008;
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
